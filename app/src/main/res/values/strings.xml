@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">GstClockBouncer</string>
     <string name="clocksim_name">Gst Net Client Clock Simulator</string>
+    <string name="bouncer_name">Gst Clock Bouncer</string>
 
     <string name="bouncer_addr">Bouncer IP Address</string>
     <string name="bouncer_port">Bouncer Port</string>
+    <string name="provider_addr">Clock Provider IP Address</string>
     <string name="provider_port">Clock Provider Port</string>
 
     <string name="start">Start</string>

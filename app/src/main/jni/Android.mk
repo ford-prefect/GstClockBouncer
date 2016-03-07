@@ -8,6 +8,14 @@ LOCAL_SHARED_LIBRARIES := gstreamer_android
 LOCAL_LDLIBS := -llog -landroid
 include $(BUILD_SHARED_LIBRARY)
 
+include $(CLEAR_VARS)
+
+LOCAL_MODULE    := gstclockbouncer
+LOCAL_SRC_FILES := clock-bouncer.c
+LOCAL_SHARED_LIBRARIES := gstreamer_android
+LOCAL_LDLIBS := -llog -landroid
+include $(BUILD_SHARED_LIBRARY)
+
 ifndef GSTREAMER_ROOT
 ifndef GSTREAMER_ROOT_ANDROID
 $(error GSTREAMER_ROOT_ANDROID is not defined!)
