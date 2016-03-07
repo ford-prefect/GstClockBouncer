@@ -74,6 +74,8 @@ receive_clock_packet(GSocket *socket, G_GNUC_UNUSED GIOCondition condition,
   GSocketAddress *src_address;
   gssize ret;
 
+  g_print ("Got a packet");
+
   ret = g_socket_receive_from (socket, &src_address, buffer,
             GST_NET_TIME_PACKET_SIZE, NULL, NULL);
   if (ret < GST_NET_TIME_PACKET_SIZE) {
@@ -82,11 +84,13 @@ receive_clock_packet(GSocket *socket, G_GNUC_UNUSED GIOCondition condition,
   }
 
   if (user_data == NULL) {
+    g_print ("Sending to master");
     send_packet_to_master(src_address, buffer);
   }
   else {
     /* Return the reply to the client */
     PortInfo *portinfo = (PortInfo *)(user_data);
+    g_print ("Returning to client");
     g_socket_send_to (masterSocket, portinfo->src_address, (const gchar *) buffer,
       GST_NET_TIME_PACKET_SIZE, NULL, NULL);
   }
