@@ -1,4 +1,4 @@
-/* GStreamer
+/*
  * Copyright (C) 2016 Jan Schmidt <thaytan@noraisin.net>
  *               2016 Arun Raghavan <arun@centricular.com>
  *

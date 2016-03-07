@@ -1,8 +1,6 @@
-/* GStreamer
- *
+/*
  * Copyright (C) 2014 Sebastian Dröge <sebastian@centricular.com>
- *               2016 FIXME
- * Author: Arun Raghavan <arun@centricular.com>
+ *               2016 Arun Raghavan <arun@centricular.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
