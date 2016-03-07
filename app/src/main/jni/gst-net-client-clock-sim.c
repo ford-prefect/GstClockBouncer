@@ -65,6 +65,8 @@ static gpointer thread_func (gpointer userdata)
   GstClock *clock = gst_system_clock_obtain ();
   gsize outlen;
 
+  g_print ("Starting thread ...");
+
   while (!g_atomic_int_get (&sim->quit)) {
     GstNetTimePacket *packet;
     GstClockTime local_2;
@@ -73,6 +75,7 @@ static gpointer thread_func (gpointer userdata)
     packet = gst_net_time_packet_new (NULL);
     packet->local_time = gst_clock_get_time (clock);
     
+    g_print ("Sending packet ...");
     if (!gst_net_time_packet_send (packet, sim->socket, sim->dst_addr, &error)) {
       g_warning ("Could not send packet: %s", error->message);
       g_error_free (error);
@@ -81,6 +84,7 @@ static gpointer thread_func (gpointer userdata)
 
     gst_net_time_packet_free (packet);
 
+    g_print ("Waiting for packet to return ...");
     if (!(packet = gst_net_time_packet_receive (sim->socket, NULL, &error))) {
       g_warning ("Could not receive packet: %s", error->message);
       g_error_free (error);
@@ -97,6 +101,10 @@ static gpointer thread_func (gpointer userdata)
       g_warning ("Failed to write to file: %s", error->message);
       g_error_free (error);
     }
+
+    g_print ("%" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT " %" G_GUINT64_FORMAT
+        " %" G_GUINT64_FORMAT "\n", packet->local_time, packet->remote_time,
+          packet->remote_time, local_2);
 
 next:
     g_usleep (G_USEC_PER_SEC);
