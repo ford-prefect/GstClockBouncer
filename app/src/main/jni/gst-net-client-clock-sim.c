@@ -85,6 +85,12 @@ static gpointer thread_func (gpointer userdata)
     gst_net_time_packet_free (packet);
 
     g_print ("Waiting for packet to return ...");
+    if (!g_socket_condition_timed_wait (sim->socket, G_IO_IN,
+          2 * G_USEC_PER_SEC, NULL, NULL)) {
+      g_warning ("Timed out");
+      goto next;
+    }
+
     if (!(packet = gst_net_time_packet_receive (sim->socket, NULL, &error))) {
       g_warning ("Could not receive packet: %s", error->message);
       g_error_free (error);
@@ -141,6 +147,8 @@ gst_net_client_clock_sim_start (const gchar *addr, guint port,
     g_error_free (error);
     goto fail;
   }
+
+  g_socket_set_blocking (sim->socket, FALSE);
 
   inetaddr = g_inet_address_new_any (G_SOCKET_FAMILY_IPV4);
   sockaddr = g_inet_socket_address_new (inetaddr, 0);
