@@ -34,7 +34,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.centricular.gstclockbouncer"
+        applicationId "com.centricular.gstclockrecorder"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1

@@ -300,7 +300,7 @@ JNI_OnLoad (JavaVM * vm, void *reserved)
 
   jclass klass =
       (*env)->FindClass (env,
-          "com/centricular/gstclockbouncer/GstNetClientClockSimActivity");
+          "com/centricular/gstclockrecorder/GstNetClientClockSimActivity");
   (*env)->RegisterNatives (env, klass, native_methods,
       G_N_ELEMENTS (native_methods));
 

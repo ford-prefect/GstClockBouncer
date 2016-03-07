@@ -17,12 +17,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-package com.centricular.gstclockbouncer;
+package com.centricular.gstclockrecorder;
 
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -31,38 +30,22 @@ import android.widget.EditText;
 
 import org.freedesktop.gstreamer.GStreamer;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-public class GstNetClientClockSimActivity extends AppCompatActivity {
-    private static native boolean nativeClassInit();
-    private native boolean nativeStart(String addr, int port, int provider_port, String file_path);
+public class GstClockBouncerActivity extends AppCompatActivity {
+    private native boolean nativeStart(String provider_addr, int provider_port, int local_port);
     private native void nativeStop();
 
-    private long native_app_data;
     boolean isStarted;
     WifiManager.WifiLock wlock;
 
     static {
         System.loadLibrary("gstreamer_android");
-        System.loadLibrary("gstnetclientclocksim");
-        nativeClassInit();
-    }
-
-    private static String getFilePath() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss.SSS", Locale.US);
-
-        return Environment.getExternalStorageDirectory().getPath() +
-                "/gstnetclientclocksim-" +
-                sdf.format(new Date()) +
-                ".txt";
+        System.loadLibrary("gstclockbouncer");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clocksim);
+        setContentView(R.layout.activity_clockbouncer);
 
         try {
             GStreamer.init(this);
@@ -78,26 +61,25 @@ public class GstNetClientClockSimActivity extends AppCompatActivity {
 
         wlock.acquire();
 
-        Button start = (Button) findViewById(R.id.sim_start);
-        Button stop = (Button) findViewById(R.id.sim_stop);
+        Button start = (Button) findViewById(R.id.bouncer_start);
+        Button stop = (Button) findViewById(R.id.bouncer_stop);
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button start = (Button) v;
-                Button stop = (Button) findViewById(R.id.sim_stop);
+                Button stop = (Button) findViewById(R.id.bouncer_stop);
 
-                EditText ip_address = (EditText) findViewById(R.id.sim_bouncer_addr);
-                EditText port = (EditText) findViewById(R.id.sim_bouncer_port);
-                EditText provider_port = (EditText) findViewById(R.id.sim_provider_port);
+                EditText ip_address = (EditText) findViewById(R.id.bouncer_provider_addr);
+                EditText port = (EditText) findViewById(R.id.bouncer_bouncer_port);
+                EditText provider_port = (EditText) findViewById(R.id.bouncer_provider_port);
 
                 boolean success = nativeStart(ip_address.getText().toString(),
-                        Integer.parseInt(port.getText().toString()),
                         Integer.parseInt(provider_port.getText().toString()),
-                        getFilePath());
+                        Integer.parseInt(port.getText().toString()));
 
                 if (success) {
-                    ((GstNetClientClockSimActivity) v.getContext()).isStarted = true;
+                    ((GstClockBouncerActivity) v.getContext()).isStarted = true;
 
                     start.setEnabled(false);
                     stop.setEnabled(true);
@@ -110,10 +92,10 @@ public class GstNetClientClockSimActivity extends AppCompatActivity {
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Button start = (Button) findViewById(R.id.sim_start);;
+                Button start = (Button) findViewById(R.id.bouncer_start);;
                 Button stop = (Button) v;
 
-                ((GstNetClientClockSimActivity) v.getContext()).isStarted = false;
+                ((GstClockBouncerActivity) v.getContext()).isStarted = false;
 
                 nativeStop();
 

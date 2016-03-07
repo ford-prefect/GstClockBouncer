@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GstClockBouncer</string>
+    <string name="app_name">GstClockRecorder</string>
     <string name="clocksim_name">Gst Net Client Clock Simulator</string>
     <string name="bouncer_name">Gst Clock Bouncer</string>
 
