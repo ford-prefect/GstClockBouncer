@@ -165,8 +165,6 @@ gst_net_client_clock_sim_start (const gchar *addr, guint port,
     goto fail;
   }
 
-  g_object_unref (sockaddr);
-
   clock = gst_system_clock_obtain ();
   sim->provider = gst_net_time_provider_new (clock, NULL, provider_port);
   gst_object_unref (clock);
@@ -190,6 +188,8 @@ gst_net_client_clock_sim_start (const gchar *addr, guint port,
     goto fail;
   }
   
+  g_object_unref (sockaddr);
+
   return sim;
 
 fail:
